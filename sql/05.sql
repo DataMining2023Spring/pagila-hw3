@@ -8,15 +8,15 @@
 */
 
 SELECT DISTINCT
-    title
-    FROM film_actor fa1
-    JOIN film_actor fa2 ON fa1.actor_id = fa2.actor_id
-    JOIN film_actor fa3 ON fa2.film_id = fa3.film_id
-    JOIN film_actor fa4 ON fa3.actor_id = fa4.actor_id
-    JOIN film f1 ON fa2.film_id = f1.film_id
-    WHERE 
-        fa1.film_id = 21 AND
-        fa4.film_id =21 AND
-        fa2.actor_id != fa3.actor_id
-    ;
-
+    f1.title
+    FROM film f1
+    JOIN film_actor fa1 ON (f1.film_id = fa1.film_id)
+    JOIN film_actor fa2 ON (fa1.film_id = fa2.film_id)
+    WHERE fa1.actor_id IN (SELECT actor_id FROM film_actor
+    JOIN film USING(film_id) WHERE film.title = 'AMERICAN CIRCUS'
+    ) AND
+    fa2.actor_id IN (SELECT actor_id FROM film_actor
+    JOIN film USING(film_id) WHERE film.title = 'AMERICAN CIRCUS'
+    ) AND
+    fa2.actor_id != fa1.actor_id
+;
